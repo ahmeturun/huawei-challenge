@@ -1,8 +1,8 @@
-package com.example.todo.repository;
+package com.example.todo.todo.repository;
 
 import java.util.List;
 
-import com.example.todo.model.ToDoList;
+import com.example.todo.todo.model.ToDoList;
 
 import org.springframework.data.repository.CrudRepository;
 

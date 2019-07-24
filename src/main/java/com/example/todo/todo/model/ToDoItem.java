@@ -1,11 +1,13 @@
-package com.example.todo.model;
+package com.example.todo.todo.model;
 
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class ToDoItem {
@@ -16,9 +18,12 @@ public class ToDoItem {
     private String description;
     private String deadline;
     private Status status;
+    @OneToMany(targetEntity = ToDoItem.class, fetch = FetchType.EAGER)
     private List<ToDoItem> dependents;
 
-    protected ToDoItem() {}
+    protected ToDoItem(){
+        
+    }
 
     public ToDoItem(String name,
         String description,
