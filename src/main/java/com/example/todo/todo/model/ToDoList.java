@@ -1,30 +1,44 @@
 package com.example.todo.todo.model;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
 
 @Entity
 public class ToDoList {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    public Long getId(){
+        return id;
+    } 
     private String name;
-    private Integer userId;
-    @OneToMany(targetEntity = ToDoItem.class, fetch = FetchType.EAGER)
-    private List<ToDoItem> toDoItems;
+    private Long userId;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
+    private Set<ToDoItem> toDoItems;
+    public Set<ToDoItem> getToDoItems(){
+        return toDoItems;
+    }
 
     protected ToDoList(){
         
     }
 
-    public ToDoList(String name, Integer userId){
+    public ToDoList(String name, Long userId, ToDoItem... toDoItems){
         this.name = name;
         this.userId = userId;
+        this.toDoItems = Stream.of(toDoItems).collect(Collectors.toSet());
+        this.toDoItems.forEach(el -> el.setToDoList(this));
     }
 }
