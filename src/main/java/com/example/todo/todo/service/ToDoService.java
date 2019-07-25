@@ -1,6 +1,7 @@
 package com.example.todo.todo.service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import javax.persistence.EntityNotFoundException;
@@ -49,7 +50,7 @@ public class ToDoService {
                 && itemOnUpdatedList.getStatus() == Status.Complete
                 && item.getStatus() != itemOnUpdatedList.getStatus()){
                 //item status is updated, check for dependent items
-                List<ToDoItem> toDoItems = item.getDependents();
+                Set<ToDoItem> toDoItems = item.getDependents();
                 Predicate<ToDoItem> isNotCompletedPredicate = e -> !e.isCompleted();
                 boolean foundNotCompleted = toDoItems.stream().anyMatch(isNotCompletedPredicate);
                 if(foundNotCompleted){
@@ -57,7 +58,6 @@ public class ToDoService {
                 }
             }
         });
-        
         return toDoListRepository.save(toDoList);
     }
 }

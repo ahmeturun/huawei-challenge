@@ -29,8 +29,8 @@ private static final Logger log = LoggerFactory.getLogger(DemoApplication.class)
 	public CommandLineRunner demo(ToDoListRepository repository){
 		return (args) -> {
 			ToDoItem item1 = new ToDoItem("innerItem", "innerdesc", "1563996931", Status.NotComplete);
-			ToDoItem item2 = new ToDoItem("dependencyItem", "item with dependency", "1563996931", Status.NotComplete);
-			// item2.addDependent(item1);
+			ToDoItem item2 = new ToDoItem("dependencyItem", "item with dependency", "1563996931", Status.NotComplete, item1);
+			
 			ToDoList toDoList = new ToDoList("testList", Long.valueOf(1), item1, item2);
 
 			repository.save(toDoList);
