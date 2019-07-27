@@ -1,6 +1,8 @@
 package com.example.todo.todo.service;
 
 import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
@@ -45,11 +47,13 @@ public class UserService {
         return sessionId;
     }
 
-    public void logout(String name) {
+    public void logout(String sessionId) {
         User currentUser = StreamSupport.stream(userRepository.findAll().spliterator(), false)
-            .filter(user -> user.getName() == name).findFirst().get();
+            .filter(user -> user.getSessionID().equals(sessionId)).findFirst().get();
 
-        currentUser.setLastLogin(Instant.MIN.toEpochMilli());
+        Calendar cl = Calendar.getInstance();
+        cl.set(1970, 0, 1);
+        currentUser.setLastLogin(cl.getTime().toInstant().getEpochSecond());
         currentUser.setSessionID("");
 
         userRepository.save(currentUser);

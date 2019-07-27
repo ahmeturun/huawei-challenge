@@ -3,10 +3,12 @@ package com.example.todo.todo.controller;
 import com.example.todo.todo.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins="*")
 @RestController
 public class UserController {
 
@@ -23,8 +25,8 @@ public class UserController {
         return userService.login(name, password);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/Logout")
-    public void logout(String name) {
-        userService.logout(name);
+    @RequestMapping(method = RequestMethod.GET, path = "/Logout")
+    public void logout(String sessionId) {
+        userService.logout(sessionId);
     }
 }
