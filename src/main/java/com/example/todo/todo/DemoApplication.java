@@ -1,6 +1,7 @@
 package com.example.todo.todo;
 
 import com.example.todo.todo.repository.ToDoListRepository;
+import com.example.todo.todo.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.Set;
 import com.example.todo.todo.entity.Status;
 import com.example.todo.todo.entity.ToDoItem;
 import com.example.todo.todo.entity.ToDoList;
+import com.example.todo.todo.entity.User;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -31,8 +33,14 @@ private static final Logger log = LoggerFactory.getLogger(DemoApplication.class)
 	}
 
 	@Bean
-	public CommandLineRunner demo(ToDoListRepository repository){
+	public CommandLineRunner demo(ToDoListRepository repository,
+		UserRepository userRepository
+	){
 		return (args) -> {
+			User user = new User(Long.valueOf(0), "test", "passwrd", "sessionid", Long.valueOf(0));
+			userRepository.save(user);
+
+
 			ToDoItem item1 = new ToDoItem(Long.valueOf(0), "innerItem", "innerdesc", "1563996931", Status.NotComplete, null);
 			Set<ToDoItem> dependents = new HashSet<ToDoItem>();
 			dependents.add(item1);

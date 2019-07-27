@@ -24,8 +24,8 @@ public class ToDoController {
     private ModelMapper modelMapper;
 
     @RequestMapping(method = RequestMethod.GET, path = "/GetToDoList")
-    public List<ToDoListDto> getToDoLists() {
-        List<ToDoList> toDoLists = toDoService.getLists();
+    public List<ToDoListDto> getToDoLists(String sessionId) {
+        List<ToDoList> toDoLists = toDoService.getLists(sessionId);
         return toDoLists.stream().map(toDoList -> modelMapper.map(toDoList, ToDoListDto.class)).collect(Collectors.toList());
     }
 

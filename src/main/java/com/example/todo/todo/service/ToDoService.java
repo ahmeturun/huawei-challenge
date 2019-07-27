@@ -3,15 +3,17 @@ package com.example.todo.todo.service;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.persistence.EntityNotFoundException;
 
 import com.example.todo.todo.entity.Status;
 import com.example.todo.todo.entity.ToDoItem;
 import com.example.todo.todo.entity.ToDoList;
+import com.example.todo.todo.entity.User;
 import com.example.todo.todo.repository.ToDoListRepository;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,14 @@ public class ToDoService {
     @Autowired
     private ToDoListRepository toDoListRepository;
 
-    public List<ToDoList> getLists() {
-        Iterable<ToDoList> resultIterable = toDoListRepository.findAll();
-        return IterableUtils.toList(resultIterable);
+    @Autowired
+    private UserService userService;
+
+    public List<ToDoList> getLists(String sessionId) {
+        // get user from sessionId
+        User currentUser = userService.getUserFromSessionId(sessionId);
+        return StreamSupport.stream(toDoListRepository.findAll().spliterator(), false)
+            .filter(list -> list.getUserId() == currentUser.getId()).collect(Collectors.toList());
     }
 
     public void deleteList(Long id) {

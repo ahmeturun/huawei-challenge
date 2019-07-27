@@ -29,7 +29,7 @@ public class ToDoServiceTests {
 
     @Test
     public void getListMustReturnAllRecords() {
-        List<ToDoList> toDoList = toDoService.getLists();
+        List<ToDoList> toDoList = toDoService.getLists("sessionid");
         Assert.assertNotNull("getlist shouldn't be null", toDoList);
         Assert.assertTrue("List should contain initial elements", toDoList.size() > 0);
     }

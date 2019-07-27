@@ -54,4 +54,10 @@ public class UserService {
 
         userRepository.save(currentUser);
     }
+
+    public User getUserFromSessionId(String sessionId){
+        User currentUser = StreamSupport.stream(userRepository.findAll().spliterator(), false)
+            .filter(user -> user.getSessionID().equals(sessionId)).findFirst().get();
+        return currentUser;
+    }
 }
