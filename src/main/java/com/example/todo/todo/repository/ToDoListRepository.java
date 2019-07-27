@@ -1,6 +1,6 @@
 package com.example.todo.todo.repository;
 
-import com.example.todo.todo.model.ToDoList;
+import com.example.todo.todo.entity.ToDoList;
 
 import org.springframework.data.repository.CrudRepository;
 

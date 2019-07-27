@@ -1,4 +1,4 @@
-package com.example.todo.todo.model;
+package com.example.todo.todo.entity;
 
 public enum Status{
     Complete,

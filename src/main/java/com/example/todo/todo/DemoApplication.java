@@ -1,10 +1,15 @@
 package com.example.todo.todo;
 
 import com.example.todo.todo.repository.ToDoListRepository;
-import com.example.todo.todo.model.Status;
-import com.example.todo.todo.model.ToDoItem;
-import com.example.todo.todo.model.ToDoList;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.example.todo.todo.entity.Status;
+import com.example.todo.todo.entity.ToDoItem;
+import com.example.todo.todo.entity.ToDoList;
+
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -28,10 +33,15 @@ private static final Logger log = LoggerFactory.getLogger(DemoApplication.class)
 	@Bean
 	public CommandLineRunner demo(ToDoListRepository repository){
 		return (args) -> {
-			ToDoItem item1 = new ToDoItem("innerItem", "innerdesc", "1563996931", Status.NotComplete);
-			ToDoItem item2 = new ToDoItem("dependencyItem", "item with dependency", "1563996931", Status.NotComplete, item1);
+			ToDoItem item1 = new ToDoItem(Long.valueOf(0), "innerItem", "innerdesc", "1563996931", Status.NotComplete, null);
+			Set<ToDoItem> dependents = new HashSet<ToDoItem>();
+			dependents.add(item1);
+			ToDoItem item2 = new ToDoItem(Long.valueOf(0), "dependencyItem", "item with dependency", "1563996931", Status.NotComplete, dependents);
 			
-			ToDoList toDoList = new ToDoList("testList", Long.valueOf(1), item1, item2);
+			Set<ToDoItem> items = new HashSet<ToDoItem>();
+			items.add(item1);
+			items.add(item2);
+			ToDoList toDoList = new ToDoList(Long.valueOf(0), "testList", Long.valueOf(1), items);
 
 			repository.save(toDoList);
 			// fetch all lists
@@ -43,5 +53,9 @@ private static final Logger log = LoggerFactory.getLogger(DemoApplication.class)
 			log.info("");
 
 		};
+	}
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 }

@@ -1,10 +1,13 @@
 package com.example.todo.todo.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.example.todo.todo.model.ToDoList;
+import com.example.todo.todo.dto.ToDoListDto;
+import com.example.todo.todo.entity.ToDoList;
 import com.example.todo.todo.service.ToDoService;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +20,13 @@ public class ToDoController {
     @Autowired
     private ToDoService toDoService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @RequestMapping(method = RequestMethod.GET, path = "/GetToDoList")
-    public List<ToDoList> getToDoLists() {
-        return toDoService.getLists();
+    public List<ToDoListDto> getToDoLists() {
+        List<ToDoList> toDoLists = toDoService.getLists();
+        return toDoLists.stream().map(toDoList -> modelMapper.map(toDoList, ToDoListDto.class)).collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/DeleteList")
@@ -28,12 +35,15 @@ public class ToDoController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/SaveList")
-    public ToDoList saveList(@RequestBody ToDoList toDoList) {
-        return toDoService.saveList(toDoList);
+    public ToDoListDto saveList(@RequestBody ToDoListDto toDoList) {
+        ToDoList fromDto = modelMapper.map(toDoList, ToDoList.class);
+        ToDoList savedList = toDoService.saveList(fromDto);
+        return modelMapper.map(savedList, ToDoListDto.class);
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/UpdateList")
-    public ToDoList updateList(@RequestBody ToDoList toDoList) {
-        return toDoService.updateList(toDoList);
+    public ToDoListDto updateList(@RequestBody ToDoListDto toDoList) {
+        ToDoList updatedList = toDoService.updateList(modelMapper.map(toDoList, ToDoList.class));
+        return modelMapper.map(updatedList, ToDoListDto.class);
     }
 }

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.example.todo.todo.model.Status;
-import com.example.todo.todo.model.ToDoItem;
-import com.example.todo.todo.model.ToDoList;
+import com.example.todo.todo.entity.Status;
+import com.example.todo.todo.entity.ToDoItem;
+import com.example.todo.todo.entity.ToDoList;
 import com.example.todo.todo.service.ToDoService;
 
 import org.junit.Assert;
@@ -36,10 +36,14 @@ public class ToDoServiceTests {
 
     @Test
     public void saveListMustReturnSavedObjectWithId() {
-        ToDoItem item1 = new ToDoItem("innerItem", "innerdesc", "1563996931", Status.NotComplete);
-        ToDoItem item2 = new ToDoItem("dependencyItem", "item with dependency", "1563996931", Status.NotComplete);
-        ToDoList toDoList = new ToDoList("testList", Long.valueOf(1), item1, item2);
-
+        ToDoItem item1 = new ToDoItem(Long.valueOf(0), "innerItem", "innerdesc", "1563996931", Status.NotComplete, null);
+        ToDoItem item2 = new ToDoItem(Long.valueOf(0), "dependencyItem", "item with dependency", "1563996931", Status.NotComplete, null);
+            
+        Set<ToDoItem> items = new HashSet<ToDoItem>();
+        items.add(item1);
+        items.add(item2);
+        ToDoList toDoList = new ToDoList(Long.valueOf(0), "testList", Long.valueOf(1), items);
+        
         ToDoList savedList = toDoService.saveList(toDoList);
 
         Assert.assertNotNull("saved item shouldn't be null.", savedList);
@@ -48,9 +52,13 @@ public class ToDoServiceTests {
 
     @Test
     public void updateListMustReturnUpdatedObject() {
-        ToDoItem item1 = new ToDoItem("innerItem", "innerdesc", "1563996931", Status.NotComplete);
-        ToDoItem item2 = new ToDoItem("dependencyItem", "item with dependency", "1563996931", Status.NotComplete);
-        ToDoList toDoList = new ToDoList("testList", Long.valueOf(1), item1, item2);
+        ToDoItem item1 = new ToDoItem(Long.valueOf(0), "innerItem", "innerdesc", "1563996931", Status.NotComplete, null);
+        ToDoItem item2 = new ToDoItem(Long.valueOf(0), "dependencyItem", "item with dependency", "1563996931", Status.NotComplete, null);
+            
+        Set<ToDoItem> items = new HashSet<ToDoItem>();
+        items.add(item1);
+        items.add(item2);
+        ToDoList toDoList = new ToDoList(Long.valueOf(0), "testList", Long.valueOf(1), items);
 
         ToDoList savedList = toDoService.saveList(toDoList);
 
@@ -69,10 +77,16 @@ public class ToDoServiceTests {
 
     @Test
     public void updateListWithIncompleteDependentMustFail(){
-        ToDoItem item1 = new ToDoItem("innerItem", "innerdesc", "1563996931", Status.NotComplete);
-        ToDoItem item2 = new ToDoItem("dependencyItem", "item with dependency", "1563996931", Status.NotComplete, item1);
-        ToDoList toDoList = new ToDoList("testList", Long.valueOf(1), item1, item2);
-
+        ToDoItem item1 = new ToDoItem(Long.valueOf(0), "innerItem", "innerdesc", "1563996931", Status.NotComplete, null);
+        Set<ToDoItem> dependents = new HashSet<ToDoItem>();
+        dependents.add(item1);
+        ToDoItem item2 = new ToDoItem(Long.valueOf(0), "dependencyItem", "item with dependency", "1563996931", Status.NotComplete, dependents);
+        
+        Set<ToDoItem> items = new HashSet<ToDoItem>();
+        items.add(item1);
+        items.add(item2);
+        ToDoList toDoList = new ToDoList(Long.valueOf(0), "testList", Long.valueOf(1), items);
+            
         ToDoList savedList = toDoService.saveList(toDoList);
 
         Predicate<ToDoItem> isNotCompletedPredicate = e -> e.getName().equals("dependencyItem");

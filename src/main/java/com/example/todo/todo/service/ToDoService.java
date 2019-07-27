@@ -6,9 +6,9 @@ import java.util.function.Predicate;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.example.todo.todo.model.Status;
-import com.example.todo.todo.model.ToDoItem;
-import com.example.todo.todo.model.ToDoList;
+import com.example.todo.todo.entity.Status;
+import com.example.todo.todo.entity.ToDoItem;
+import com.example.todo.todo.entity.ToDoList;
 import com.example.todo.todo.repository.ToDoListRepository;
 
 import org.apache.commons.collections4.IterableUtils;
