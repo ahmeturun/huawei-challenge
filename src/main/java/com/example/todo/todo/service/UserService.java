@@ -24,7 +24,7 @@ public class UserService {
     public String login(String name, String password) {
 
         User currentUser = StreamSupport.stream(userRepository.findAll().spliterator(), false)
-            .filter(user -> user.getName().equals(name)).findFirst().get();
+            .filter(user -> user.getName().equals(name) && user.getPassword().equals(password)).findFirst().get();
         if(currentUser == null){
             throw new EntityNotFoundException("User not found");
         }
@@ -59,7 +59,13 @@ public class UserService {
         userRepository.save(currentUser);
     }
 
-    public User getUserFromSessionId(String sessionId){
+    public User getUserFromUserName(String userName){
+        User currentUser = StreamSupport.stream(userRepository.findAll().spliterator(), false)
+            .filter(user -> user.getName().equals(userName)).findFirst().get();
+        return currentUser;
+    }
+
+    public User getUserFromSessionId(String sessionId) {
         User currentUser = StreamSupport.stream(userRepository.findAll().spliterator(), false)
             .filter(user -> user.getSessionID().equals(sessionId)).findFirst().get();
         return currentUser;

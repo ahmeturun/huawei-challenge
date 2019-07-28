@@ -27,9 +27,9 @@ public class ToDoService {
     @Autowired
     private UserService userService;
 
-    public List<ToDoList> getLists(String sessionId) {
+    public List<ToDoList> getLists(String userName) {
         // get user from sessionId
-        User currentUser = userService.getUserFromSessionId(sessionId);
+        User currentUser = userService.getUserFromUserName(userName);
         return StreamSupport.stream(toDoListRepository.findAll().spliterator(), false)
             .filter(list -> list.getUserId() == currentUser.getId()).collect(Collectors.toList());
     }
