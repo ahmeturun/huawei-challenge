@@ -1,8 +1,9 @@
 # huawei-challenge
 
 requirements
-1- jdk 1.8
-2- Maven 3.2
+
+1. jdk 1.8
+2. Maven 3.2
 
 to create the jar execute:
 ```
